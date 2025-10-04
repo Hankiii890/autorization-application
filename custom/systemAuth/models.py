@@ -16,7 +16,7 @@ class UserManager(BaseUserManager):
         user = self.model(email = self.normalize_email(email),
                           first_name=first_name, 
                           last_name=last_name,
-                          password=password)
+                          )
         
         user.set_password(password) 
         if commit:
@@ -49,11 +49,16 @@ class User(AbstractUser, PermissionsMixin):
     is_staff = models.BooleanField(_("staff status"), default=False)    # То что обычный бзер не сможет зайти в админку!
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)  # Дата и время создания "пользователя"!
 
-object = UserManager()  # Объект создания и ответов для пользователей
+objects = UserManager()  # Объект создания и ответов для пользователей
 
 USERNAME_FIED = 'email'
 REQUIRED_FIELDS = ['first_name']    # обязательно при создании админа  
 
+def __str__(self):
+    return f"{self.email} ({self.get_full_name()})"
+
+def get_full_name(self):
+    return f"{self.first_name} {self.last_name}".strip()
 
 
 
